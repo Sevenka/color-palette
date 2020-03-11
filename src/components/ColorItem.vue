@@ -1,9 +1,9 @@
 <template>
-  <div class="color-item">
-    <div class="color-item__preview" :style="{backgroundColor: `#${hex}`}"></div>
-    <div class="color-item__description">
-      <p class="color-item__title">{{ title }}</p>
-      <p class="color-item__hex">{{ hex }}</p>
+  <div @click="copyColor" class="color-item">
+    <div class="preview" :style="{backgroundColor: hexCode}"></div>
+    <div class="description">
+      <p class="title">{{ title }}</p>
+      <p class="hex">{{ hexCode }}</p>
     </div>
   </div>
 </template>
@@ -13,25 +13,52 @@ export default {
   props: {
     hex: String,
     title: String
+  },
+  computed: {
+    hexCode() {
+      return `#${this.hex}`;
+    }
+  },
+  methods: {
+    copyColor() {
+      navigator.clipboard.writeText(this.hexCode).then(
+        () => {
+          alert("Copying a hexcode to clipboard was successful!");
+        },
+        err => {
+          alert("Could not copy text: ", err);
+        }
+      );
+    }
   }
 };
 </script>
 
 <style lang="scss">
-.color-item {
-  display: flex;
-  flex-basis: 300px;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-left: 10px;
-  padding: 10px;
-  border: 1px solid #bbb;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+@import "../scss/helpers";
 
-  &__preview {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
+.color-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-basis: 30%;
+  align-items: center;
+  margin-bottom: $base-size*3;
+  margin-left: $base-size*3;
+  padding: $base-size;
+  border: 1px solid #bbb;
+  background-color: #fff;
+  box-shadow: 0 $base-size $base-size*2 rgba(0, 0, 0, 0.19), 0 $base-size $base-size rgba(0, 0, 0, 0.23);
+  transition: all .2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.05);
   }
+}
+.preview {
+  width: $base-size*5;
+  height: $base-size*5;
+  margin-right: $base-size;
+  border-radius: 50%;
 }
 </style>
