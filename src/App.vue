@@ -1,28 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="color-items">
+      <ColorItem
+        v-for="colorItem in colorItems"
+        :key="colorItem.id"
+        :hex="colorItem.hex"
+        :tags="colorItem.tags"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ColorItem from "./components/ColorItem";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    ColorItem
+  },
+  data() {
+    return {
+      colorItems: []
+    };
+  },
+  created() {
+    this.getColorItems();
+  },
+  methods: {
+    getColorItems() {
+      fetch("http://www.colr.org/json/colors/random/30")
+        .then(response => response.json())
+        .then(data => {
+          this.colorItems = data.colors;
+        })
+        .catch(error => console.error(error));
+    }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+.color-items {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
