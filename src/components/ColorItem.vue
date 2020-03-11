@@ -12,15 +12,7 @@
 export default {
   props: {
     hex: String,
-    tags: Array
-  },
-  computed: {
-    title() {
-      return this.tags.reduce(
-        (acc, currentValue) => `${acc} ${currentValue.name}`,
-        ""
-      );
-    }
+    title: String
   }
 };
 </script>
